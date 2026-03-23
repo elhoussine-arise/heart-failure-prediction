@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Galb-AI - Heart Risk Assessment</title>
+    <link rel="shortcut icon" href="../Website1 images/uploads_letter_c_letter_c_PNG71.png">
+    <meta charset="utf-8"> 
+    <meta name="viewport"content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom CSS */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        .navbar-brand img {
+            margin-right: 8px;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #17a2b8 !important;
+        }
+        
+        .carousel-caption {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 25px;
+            border-radius: 10px;
+            bottom: 25%;
+        }
+        
+        .carousel-caption h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .carousel-caption h3, .carousel-caption h2 {
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        
+        .btn {
+            font-weight: 500;
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            margin-bottom: 30px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            font-weight: 600;
+            border-bottom: none;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .form-control {
+            padding: 12px 18px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            background-color: #f8f9fa;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            background-color: #fff;
+        }
+        
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+        
+        .risk-meter {
+            width: 100%;
+            height: 25px;
+            background: linear-gradient(to right, #28a745, #ffc107, #dc3545);
+            border-radius: 50px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .risk-indicator {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 3px solid #343a40;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: left 0.5s ease;
+        }
+        
+        .prediction-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .risk-percentage {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+        
+        .risk-category {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .feature-item {
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            margin-bottom: 15px;
+            border-left: 4px solid #007bff;
+            transition: all 0.3s;
+        }
+        
+        .feature-item:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+        
+        .footer-heading {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-link {
+            color: #adb5bd;
+            transition: color 0.3s;
+        }
+        
+        .footer-link:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .social-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Custom form styling */
+        .form-section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .form-section-title {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon .form-control {
+            padding-left: 40px;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 13px;
+            top: 42px;
+            color: #6c757d;
+        }
+        
+        /* Progress bar animation */
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        .progress-animated .progress-bar {
+            animation: progress 2s ease-in-out;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            padding: 15px 20px;
+        }
+        
+        /* Custom Tooltip */
+        .tooltip-icon {
+            cursor: pointer;
+            color: #6c757d;
+            margin-left: 5px;
+        }
+        
+        /* Custom Radio & Checkbox */
+        .custom-control-label::before {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .custom-control-label::after {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        /* SHAP Styles */
+        .feature-contribution {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .feature-positive {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid #dc3545;
+        }
+        
+        .feature-negative {
+            background-color: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid #28a745;
+        }
+        
+        .feature-bar {
+            height: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+        
+        .feature-bar-positive {
+            background-color: #dc3545;
+        }
+        
+        .feature-bar-negative {
+            background-color: #28a745;
+        }
+        
+        .shap-table th, .shap-table td {
+            padding: 0.5rem;
+            vertical-align: middle;
+        }
+        
+        .shap-value-bar {
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../Website1 images/scales-of-justice-2507360-2102448.png" width="30" height="30" class="d-inline-block align-top"> 
+                Galb-AI
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#"><i class="fas fa-home mr-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-user-injured mr-1"></i> My Patients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-running mr-1"></i> My Sport Space</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-info-circle mr-1"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-envelope mr-1"></i> Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Carousel -->
+    <div id="heroCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#heroCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#heroCarousel" data-slide-to="1"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100" src="https://content.health.harvard.edu/wp-content/uploads/2023/08/5d1bd5ec-2d4d-415c-bf57-897704ce555e.jpg" alt="AI Health Technology">
+                <div class="carousel-caption">
+                    <h1>Choose</h1>
+                    <h3>AI for your health</h3>
+                    <button type="button" class="btn btn-primary btn-lg" onclick="scrollToForm()">Learn more</button>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="https://dvl2h13awlxkt.cloudfront.net/assets/general-images/Knowledge/_1200x630_crop_center-center_82_none/CVD-iStock-1266230179.jpg?mtime=1653282867" alt="AI Medical Analysis">
+                <div class="carousel-caption">
+                    <h6 class="text-center">Save lives with</h6>
+                    <h2 class="text-center display-3">Precise AI models</h2>
+                    <button type="button" class="btn btn-danger btn-lg" onclick="scrollToForm()">Start Diagnose</button>
+                </div>
+            </div>
+        </div>
+        <!-- Carousel Controls -->
+        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" ></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" ></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <div class="container mt-5 pt-5" id="assessmentForm">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h2>Cardiac Risk Prediction</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="predictionForm">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Age</label>
+                                    <input type="number" class="form-control" name="age" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Anaemia (0=No, 1=Yes)</label>
+                                    <input type="number" class="form-control" name="anaemia" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Creatinine Phosphokinase</label>
+                                    <input type="number" class="form-control" name="creatinine_phosphokinase" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Diabetes (0=No, 1=Yes)</label>
+                                    <input type="number" class="form-control" name="diabetes" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Ejection Fraction (%)</label>
+                                    <input type="number" class="form-control" name="ejection_fraction" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>High Blood Pressure (0=No, 1=Yes)</label>
+                                    <input type="number" class="form-control" name="high_blood_pressure" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Platelets</label>
+                                    <input type="number" class="form-control" name="platelets" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Serum Creatinine</label>
+                                    <input type="number" step="0.1" class="form-control" name="serum_creatinine" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Serum Sodium</label>
+                                    <input type="number" class="form-control" name="serum_sodium" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Sex (0=Female, 1=Male)</label>
+                                    <input type="number" class="form-control" name="sex" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Smoking (0=No, 1=Yes)</label>
+                                    <input type="number" class="form-control" name="smoking" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Time</label>
+                                    <input type="number" class="form-control" name="time" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Predict Risk</button>
+                        </form>
+    
+                        <div id="predictionResult" class="mt-4" style="display:none;">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    Risk Assessment Results
+                                </div>
+                                <div class="card-body">
+                                    <!-- Risk meter -->
+                                    <div class="risk-meter mt-3">
+                                        <div id="riskIndicator" class="risk-indicator" style="left: 0%;"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-muted small">
+                                        <span>Low Risk</span>
+                                        <span>Moderate Risk</span>
+                                        <span>High Risk</span>
+                                    </div>
+                                    
+                                    <h5 class="card-title mt-3" id="riskCategory">Risk Category</h5>
+                                    <p class="card-text">
+                                        <strong>Predicted Risk:</strong> <span id="riskPercentage">0%</span>
+                                    </p>
+                                    <div id="riskAlert" class="alert" role="alert">
+                                        Risk Details
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SHAP Analysis Card - Will be displayed after prediction -->
+                            <div id="shapAnalysis" class="card mt-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="m-0"><i class="fas fa-chart-bar mr-2"></i>Feature Impact Analysis (SHAP)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Understanding how each factor contributes to the prediction:</p>
+                                    
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <h6>Top Risk-Increasing Factors:</h6>
+                                            <div id="increasing-factors">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Top Risk-Decreasing Factors:</h6>
+                                            <div id="decreasing-factors">
+                                                <!-- Will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="mt-4">All Factors Impact:</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover shap-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Factor</th>
+                                                    <th>Impact</th>
+                                                    <th>Effect</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="shap-table-body">
+                                                <!-- Will be populated by JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="footer-heading">About Galb-AI</h5>
+                    <p>Advanced AI-powered tools for cardiac risk assessment and patient management, helping healthcare professionals make better decisions.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-heading">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Home</a></li>
+                        <li><a href="#" class="footer-link">My Patients</a></li>
+                        <li><a href="#" class="footer-link">About</a></li>
+                        <li><a href="#" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-heading">Connect With Us</h5>
+                    <div class="d-flex">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                    <p class="mt-3">Email: info@galb-ai.com</p>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; 2025 Galb-AI. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Function to scroll to the form section
+    function scrollToForm() {
+        document.getElementById('assessmentForm').scrollIntoView({ 
+            behavior: 'smooth' 
+        });
+    }
+    
+    document.getElementById('predictionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        document.getElementById('predictionResult').style.display = 'block';
+        document.getElementById('riskCategory').textContent = 'Calculating...';
+        document.getElementById('riskPercentage').textContent = '...';
+        document.getElementById('riskAlert').className = 'alert alert-info';
+        document.getElementById('riskAlert').textContent = 'Processing patient data...';
+        
+        // Récupérer les valeurs du formulaire dans l'ordre exact des colonnes de votre dataset
+        const formData = [
+            parseFloat(document.querySelector('input[name="age"]').value),
+            parseFloat(document.querySelector('input[name="anaemia"]').value),
+            parseFloat(document.querySelector('input[name="creatinine_phosphokinase"]').value),
+            parseFloat(document.querySelector('input[name="diabetes"]').value),
+            parseFloat(document.querySelector('input[name="ejection_fraction"]').value),
+            parseFloat(document.querySelector('input[name="high_blood_pressure"]').value),
+            parseFloat(document.querySelector('input[name="platelets"]').value),
+            parseFloat(document.querySelector('input[name="serum_creatinine"]').value),
+            parseFloat(document.querySelector('input[name="serum_sodium"]').value),
+            parseFloat(document.querySelector('input[name="sex"]').value),
+            parseFloat(document.querySelector('input[name="smoking"]').value),
+            parseFloat(document.querySelector('input[name="time"]').value)
+        ];
+        
+        // Use setTimeout to simulate processing time
+        setTimeout(() => {
+            // In a real implementation, this would call the backend Python model
+            const risquePredit = simulerPredictionRNA(formData);
+            
+            // Get SHAP explanations
+            const shapExplanation = simulerExplicationSHAP(formData);
+            
+            // Show prediction and explanation
+            afficherResultat(risquePredit, shapExplanation);
+        }, 1500);
+    });
+    
+    // Function to display the risk assessment result
+    function afficherResultat(risquePredit, shapExplanation) {
+        // Set the risk indicator position
+        const indicator = document.getElementById('riskIndicator');
+        indicator.style.left = `${risquePredit}%`;
+        
+        // Update the risk percentage
+        document.getElementById('riskPercentage').textContent = `${risquePredit.toFixed(2)}%`;
+        
+        // Determine risk category and alert
+        let categorie, alertClass, alertMessage;
+        
+        if (risquePredit >= 75) {
+            categorie = "TRÈS ÉLEVÉ";
+            alertClass = "alert-danger";
+            alertMessage = "Urgent medical attention recommended";
+        } else if (risquePredit >= 50) {
+            categorie = "ÉLEVÉ";
+            alertClass = "alert-warning";
+            alertMessage = "High risk, consult a healthcare professional";
+        } else if (risquePredit >= 25) {
+            categorie = "MODÉRÉ";
+            alertClass = "alert-info";
+            alertMessage = "Moderate risk, lifestyle modifications suggested";
+        } else {
+            categorie = "FAIBLE";
+            alertClass = "alert-success";
+            alertMessage = "Low risk, maintain healthy lifestyle";
+        }
+        
+        // Update UI with risk category
+        document.getElementById('riskCategory').textContent = categorie;
+        
+        const riskAlert = document.getElementById('riskAlert');
+        riskAlert.className = `alert ${alertClass}`;
+        riskAlert.textContent = alertMessage;
+        
+        // Display SHAP explanation
+        afficherExplicationSHAP(shapExplanation);
+    }
+    
+    // Function to display SHAP explanation
+    function afficherExplicationSHAP(explanation) {
+        // Display increasing factors
+        const increasingFactorsDiv = document.getElementById('increasing-factors');
+        increasingFactorsDiv.innerHTML = '';
+        
+        explanation.top_increasing.forEach(factor => {
+            const factorDiv = document.createElement('div');
+            factorDiv.className = 'feature-contribution feature-positive mb-2';
+            factorDiv.innerHTML = `
+                <div>
+                    <i class="fas fa-arrow-up text-danger mr-2"></i>
+                    <strong>${factor}</strong>
+                </div>
+            `;
+            increasingFactorsDiv.appendChild(factorDiv);
+        });
+        
+        // Display decreasing factors
+        const decreasingFactorsDiv = document.getElementById('decreasing-factors');
+        decreasingFactorsDiv.innerHTML = '';
+        
+        explanation.top_decreasing.forEach(factor => {
+            const factorDiv = document.createElement('div');
+            factorDiv.className = 'feature-contribution feature-negative mb-2';
+            factorDiv.innerHTML = `
+                <div>
+                    <i class="fas fa-arrow-down text-success mr-2"></i>
+                    <strong>${factor}</strong>
+                </div>
+            `;
+            decreasingFactorsDiv.appendChild(factorDiv);
+        });
+        
+        // Display all factors in table
+        const shapTableBody = document.getElementById('shap-table-body');
+        shapTableBody.innerHTML = '';
+        
+        explanation.contributions.forEach(([feature, value]) => {
+            const isPositive = value > 0;
+            const impact = Math.abs(value * 100).toFixed(2);
+            const barWidth = Math.min(Math.abs(value * 200), 100); // Scale for display
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${feature}</td>
+                <td>
+                    <div class="${isPositive ? 'text-danger' : 'text-success'}">
+                        <i class="fas fa-${isPositive ? 'arrow-up' : 'arrow-down'} mr-1"></i>
+                        ${impact}%
+                    </div>
+                    <div class="shap-value-bar" style="width: ${barWidth}%; background-color: ${isPositive ? '#dc3545' : '#28a745'};"></div>
+                </td>
+                <td>${isPositive ? 'Increases risk' : 'Decreases risk'}</td>
+            `;
+            shapTableBody.appendChild(row);
+        });
+    }
+    
+    // Function to simulate the RNA prediction (to be replaced with actual backend call)
+    function simulerPredictionRNA(inputData) {
+        // IMPORTANT: In production, this would call your Python backend
+        // For demonstration purposes, we'll simulate a risk score based on simplified rules
+        
+        let risk = 20; // Base risk
+        
+        // Age factor (higher age = higher risk)
+        if (inputData[0] > 70) risk += 25;
+        else if (inputData[0] > 60) risk += 15;
+        else if (inputData[0] > 50) risk += 5;
+        
+        // Ejection fraction (lower = higher risk)
+        if (inputData[4] < 30) risk += 30;
+        else if (inputData[4] < 40) risk += 15;
+        
+        // Serum creatinine (higher = higher risk)
+        if (inputData[7] > 1.8) risk += 15;
+        else if (inputData[7] > 1.3) risk += 10;
+        
+        // Binary factors
+        if (inputData[1] > 0) risk += 5; // Anaemia
+        if (inputData[3] > 0) risk += 7; // Diabetes
+        if (inputData[5] > 0) risk += 8; // High blood pressure
+        if (inputData[10] > 0) risk += 5; // Smoking
+        
+        // Cap at 100%
+        return Math.min(Math.max(risk, 5), 95); // Ensure it's between 5% and 95%
+    }
+    
+    // Function to simulate SHAP explanation (to be replaced with actual backend call)
+    function simulerExplicationSHAP(inputData) {
+        // This would be replaced with actual SHAP values from your backend
+        const featureNames = [
+            'Age', 'Anaemia', 'Creatinine Phosphokinase', 'Diabetes', 
+            'Ejection Fraction', 'High Blood Pressure', 'Platelets',
+            'Serum Creatinine', 'Serum Sodium', 'Sex', 'Smoking', 'Time'
+        ];
+        
+        // Generate feature contributions based on input data
+        const contributions = [];
+        
+        // Age
+        let ageValue = 0;
+        if (inputData[0] > 70) ageValue = 0.35;
+        else if (inputData[0] > 60) ageValue = 0.25;
+        else if (inputData[0] > 50) ageValue = 0.15;
+        else ageValue = 0.05;
+        contributions.push(['Age', ageValue]);
+        
+        // Anaemia
+        contributions.push(['Anaemia', inputData[1] > 0 ? 0.1 : -0.05]);
+        
+        // Creatinine Phosphokinase
+        let cpkValue = 0;
+        if (inputData[2] > 500) cpkValue = 0.15;
+        else if (inputData[2] > 300) cpkValue = 0.08;
+        else cpkValue = 0.02;
+        contributions.push(['Creatinine Phosphokinase', cpkValue]);
+        
+        // Diabetes
+        contributions.push(['Diabetes', inputData[3] > 0 ? 0.18 : -0.05]);
+        
+        // Ejection Fraction (lower is worse)
+        let efValue = 0;
+        if (inputData[4] < 30) efValue = 0.40;
+        else if (inputData[4] < 40) efValue = 0.25;
+        else if (inputData[4] < 50) efValue = 0.10;
+        else efValue = -0.10;
+        contributions.push(['Ejection Fraction', efValue]);
+        
+        // High Blood Pressure
+        contributions.push(['High Blood Pressure', inputData[5] > 0 ? 0.20 : -0.08]);
+        
+        // Platelets (normal range 150,000 to 450,000)
+        let plateletsValue = 0;
+        if (inputData[6] < 150000) plateletsValue = 0.10;
+        else if (inputData[6] > 450000) plateletsValue = 0.05;
+        else plateletsValue = -0.05;
+        contributions.push(['Platelets', plateletsValue]);
+        
+        // Serum Creatinine (higher is worse)
+        let scrValue = 0;
+        if (inputData[7] > 1.8) scrValue = 0.30;
+        else if (inputData[7] > 1.3) scrValue = 0.20;
+        else if (inputData[7] > 1.0) scrValue = 0.10;
+        else scrValue = -0.10;
+        contributions.push(['Serum Creatinine', scrValue]);
+        
+        // Serum Sodium (normal range 135-145)
+        let sodiumValue = 0;
+        if (inputData[8] < 135) sodiumValue = 0.15;
+        else if (inputData[8] > 145) sodiumValue = 0.08;
+        else sodiumValue = -0.08;
+        contributions.push(['Serum Sodium', sodiumValue]);
+        
+        // Sex (1=Male, statistically higher risk)
+        contributions.push(['Sex', inputData[9] > 0 ? 0.12 : -0.08]);
+        
+        // Smoking
+        contributions.push(['Smoking', inputData[10] > 0 ? 0.15 : -0.05]);
+        
+        // Time (not as significant)
+        contributions.push(['Time', 0.01]);
+        
+        // Sort by absolute value
+        contributions.sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
+        
+        // Get the top increasing and decreasing features
+        const increasing = contributions.filter(c => c[1] > 0).map(c => c[0]);
+        const decreasing = contributions.filter(c => c[1] < 0).map(c => c[0]);
+        
+        return {
+            contributions: contributions,
+            top_increasing: increasing.slice(0, 3),
+            top_decreasing: decreasing.slice(0, 3)
+        };
+    }
+    </script>
+</body>
+</html>
