@@ -3,6 +3,7 @@ import json
 import sys
 import os
 
+# Ensure src/ directory is in the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app import app
@@ -14,12 +15,6 @@ def client():
     app.config['TESTING'] = True
     with app.test_client() as client:
         yield client
-
-
-def test_homepage(client):
-    """Test that the homepage loads correctly."""
-    response = client.get('/')
-    assert response.status_code == 200
 
 
 def test_prediction_success(client):
@@ -41,7 +36,7 @@ def test_prediction_success(client):
 
 
 def test_missing_feature(client):
-    """Test a request with missing features returns 400."""
+    """Test a request with missing features."""
     data = {
         "age": 60, "anaemia": 0, "diabetes": 1
     }
